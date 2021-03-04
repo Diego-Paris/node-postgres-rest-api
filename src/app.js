@@ -5,8 +5,8 @@ const cors = require('cors');
 
 require('dotenv').config();
 
-const middlewares = require('./middlewares');
-const api = require('./api');
+const middlewares = require('./api/middlewares/errorHandlers');
+const api = require('./api/routes');
 
 const app = express();
 
@@ -15,9 +15,10 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// Test route
 app.get('/', (req, res, next) => {
   res.json({
-    message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
+    message: 'Server is running! 🌏'
   });
 });
 
