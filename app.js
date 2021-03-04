@@ -22,6 +22,11 @@ app.get('/', (req, res, next) => {
   });
 });
 
+//-- DATABASE CONFIGURATION --//
+app.db = require('./db-init');
+//-- END OF DB CONFIGURATION --//
+
+
 app.use('/api/v1', api);
 
 app.use(middlewares.notFound);

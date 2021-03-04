@@ -2,10 +2,19 @@ const express = require('express');
 const router = express.Router();
 
 const Users = require('./controller');
+const to = require('../../utils').to;
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res, next) => {
+
+  const [err, result] = await to(Users.getAll());
+
+  if (err) {
+    return next(err);
+  }
+  
   res.json({
-    message: "In user!"
+    message: "Retrieved all users!",
+    result
   });
 });
 

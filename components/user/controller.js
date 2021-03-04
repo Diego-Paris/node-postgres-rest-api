@@ -1,5 +1,5 @@
 const User = require('./model');
-
+const to = require('../../utils').to;
 
 let mu = {}
 
@@ -15,8 +15,29 @@ mu.getByID = (idToFind) => {
   user = User.getByID(idToFind);
   
   return user;
-
-
 };
+
+mu.getAll = async () => {
+
+  // make a call to the database layer to retrieve all users
+  const [err, result] = await to(User.getAll());
+
+  if (err) {
+    throw err;
+  }
+
+  let filtered = result.map(obj => {
+    return {
+      id: obj.id,
+      username: obj.username,
+      email: obj.email,
+      active: obj.active,
+    }
+  });
+
+  console.log(filtered);
+
+  return filtered;
+}
 
 module.exports = mu;
