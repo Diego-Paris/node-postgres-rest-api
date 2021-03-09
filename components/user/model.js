@@ -8,21 +8,42 @@ let mu = {};
 // and expect a response, at this layer we only need to worry
 // with making calls to the database no need to modify or clean
 // up the result once retrieved.  
-mu.getByID = (idToFind) => {
-
-
-  console.log("in model!")
-  user = usersArr.find(user => user.id == idToFind);
-
-  return user;
-}
-
-mu.getAll = async () => {
+mu.getByID = async (idToFind) => {
 
   let query = `
     SELECT *
-    FROM users;
+    FROM users
+    WHERE id=${idToFind};
   `;
+
+  const [err, result] = await to(db.any(query));
+
+  // An error occurred locally attempting to send the query
+  // or an error ocurred in the database and it sent a response
+  if (err || result.severity === 'ERROR') {
+    throw err;
+  }
+
+  if (result.length === 0) {
+    throw new Error("User is not found");
+  }
+
+  return result[0];
+}
+
+mu.getAll = async (filters) => {
+
+  let query = `
+    SELECT *
+    FROM users
+  `;
+
+  if ('active' in filters) {
+    query += `
+    WHERE active = ${filters.active};
+    `;
+  }
+
 
   const [err, result] = await to(db.any(query));
 

@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Test route
 app.get('/', (req, res, next) => {
-  res.json({
+  res.status(418).json({
     message: 'Server is running! 🌏'
   });
 });
